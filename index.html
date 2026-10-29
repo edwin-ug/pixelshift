@@ -1958,9 +1958,11 @@
                 }
               });
             })
-            .catch(function () {
+            .catch(function (err) {
               endSending();
-              showError('Sorry, your request could not be sent. Please try again, or email us directly at pixelshift.com@gmail.com.');
+              if (window.console) console.error('Quote form send failed:', err);
+              var why = err && err.message && err.message !== 'Request failed' ? ' (' + err.message + ')' : '';
+              showError('Sorry, your request could not be sent' + why + '. Please try again, or email us directly at pixelshift.com@gmail.com.');
             });
         });
       }
