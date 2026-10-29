@@ -1872,9 +1872,11 @@
       }
       renderUploads();
 
-      // 6. Form Submission: emailed to the studio inbox via FormSubmit
-      //    (first ever submission triggers a one-time activation email to this address)
-      var FORM_ENDPOINT = 'https://formsubmit.co/ajax/pixelshift.com@gmail.com';
+      // 6. Form Submission: Web3Forms Gateway with Fail-Safe Direct Email Fallback
+      //    Get your free access key at https://web3forms.com (delivered to pixelshift.com@gmail.com)
+      var WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY_HERE';
+      var FORM_ENDPOINT = 'https://api.web3forms.com/submit';
+
       var intakeForm = document.getElementById('projectIntakeForm');
       var confirmBox = document.getElementById('intakeConfirmationBox');
       var resetBtn = document.getElementById('resetFormBtn');
@@ -1882,8 +1884,21 @@
       var formError = document.getElementById('formError');
       var submitLabel = submitBtn ? submitBtn.innerHTML : '';
 
-      function showError(msg) { formError.textContent = msg; formError.style.display = 'block'; }
-      function clearError() { formError.style.display = 'none'; formError.textContent = ''; }
+      function showError(msg, mailtoUrl) {
+        if (mailtoUrl) {
+          formError.innerHTML = '<div style="margin-bottom:10px;">' + msg + '</div>' +
+            '<a href="' + mailtoUrl + '" class="button" style="display:inline-block;padding:9px 18px;font-size:13px;background:var(--ps-gold);color:var(--ps-espresso);text-decoration:none;font-weight:700;border-radius:0;">' +
+              'Send Quote Directly via Email &rarr;' +
+            '</a>';
+        } else {
+          formError.textContent = msg;
+        }
+        formError.style.display = 'block';
+      }
+      function clearError() {
+        formError.style.display = 'none';
+        formError.innerHTML = '';
+      }
       function selText(id) {
         var el = document.getElementById(id);
         return el && el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : '';
@@ -1900,6 +1915,28 @@
         intakeForm.style.display = 'none';
         confirmBox.style.display = 'block';
         confirmBox.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function buildMailto(name, email, price, link, notes, uploaded) {
+        var filesList = uploaded.length
+          ? uploaded.map(function (f) { return '• ' + f.file.name + ' (' + fmtMB(f.file.size) + ')\n  S3 Key: ' + f.key + '\n  AWS Console: ' + consoleUrl(f.key); }).join('\n\n')
+          : '(none)';
+        var subject = encodeURIComponent('Pixelshift Quote Request - ' + name);
+        var body = encodeURIComponent(
+          'Hi Pixelshift Team,\n\n' +
+          'I would like to request a guaranteed quote for my .Sketch project:\n\n' +
+          '• Client Name: ' + name + '\n' +
+          '• Client Email: ' + email + '\n' +
+          '• Target Format: ' + selText('projectStackSelect') + '\n' +
+          '• Turnaround: ' + selText('projectUrgencySelect') + '\n' +
+          '• Artboards: ' + (artboardSlider ? artboardSlider.value : '1') + ' Page(s)\n' +
+          '• Estimator Pricing: ' + price + '\n\n' +
+          '• Uploaded .Sketch Files (S3):\n' + filesList + '\n\n' +
+          '• Cloud Link: ' + (link || '(none)') + '\n\n' +
+          '• Specifications & Notes:\n' + (notes || '(none)') + '\n\n' +
+          'Looking forward to your reply.'
+        );
+        return 'mailto:pixelshift.com@gmail.com?subject=' + subject + '&body=' + body;
       }
 
       if (intakeForm) {
@@ -1928,26 +1965,43 @@
           // Spam trap: real visitors never fill the hidden field
           if (document.getElementById('hpField').value) { showConfirmation(name, email, price); return; }
 
-          var fd = new FormData();
-          fd.append('name', name);
-          fd.append('email', email);
-          fd.append('Target format', selText('projectStackSelect'));
-          fd.append('Turnaround', selText('projectUrgencySelect'));
-          fd.append('Uploaded files', uploaded.length
-            ? uploaded.map(function (f) { return f.file.name + ' (' + fmtMB(f.file.size) + ')\n' + consoleUrl(f.key) + '\nKey: ' + f.key; }).join('\n\n')
-            : '(none)');
-          fd.append('Cloud link', link || '(none)');
-          fd.append('Notes', notes || '(none)');
-          fd.append('Estimator quote', price);
-          if (artboardSlider) fd.append('Artboards (estimator)', artboardSlider.value);
-          fd.append('_subject', 'New Pixelshift quote request from ' + name);
-          fd.append('_template', 'table');
-          fd.append('_captcha', 'false');
+          var mailtoUrl = buildMailto(name, email, price, link, notes, uploaded);
+
+          // If Web3Forms access key is not yet set, provide instant direct email fallback
+          if (!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY === 'YOUR_ACCESS_KEY_HERE') {
+            showError('To complete your request, click below to send your quote directly to pixelshift.com@gmail.com with your uploaded file link:', mailtoUrl);
+            return;
+          }
+
+          var payload = {
+            access_key: WEB3FORMS_ACCESS_KEY,
+            subject: 'New Pixelshift quote request from ' + name,
+            from_name: 'Pixelshift Studio Intake',
+            name: name,
+            email: email,
+            'Target format': selText('projectStackSelect'),
+            'Turnaround': selText('projectUrgencySelect'),
+            'Uploaded files': uploaded.length
+              ? uploaded.map(function (f) { return f.file.name + ' (' + fmtMB(f.file.size) + ')\n' + consoleUrl(f.key) + '\nKey: ' + f.key; }).join('\n\n')
+              : '(none)',
+            'Cloud link': link || '(none)',
+            'Notes': notes || '(none)',
+            'Estimator quote': price,
+            'Artboards': artboardSlider ? artboardSlider.value : '1',
+            botcheck: ''
+          };
 
           submitBtn.disabled = true;
           submitBtn.textContent = 'Sending\u2026';
 
-          fetch(FORM_ENDPOINT, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } })
+          fetch(FORM_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          })
             .then(function (res) {
               return res.json().catch(function () { return {}; }).then(function (data) {
                 if (res.ok && (data.success === true || data.success === 'true')) {
@@ -1962,7 +2016,7 @@
               endSending();
               if (window.console) console.error('Quote form send failed:', err);
               var why = err && err.message && err.message !== 'Request failed' ? ' (' + err.message + ')' : '';
-              showError('Sorry, your request could not be sent' + why + '. Please try again, or email us directly at pixelshift.com@gmail.com.');
+              showError('Sorry, automated notification delivery failed' + why + '. Please click below to send your quote directly via email:', mailtoUrl);
             });
         });
       }
