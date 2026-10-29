@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<html lang="en" class="js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pixelshift — Sketch to HTML &amp; CSS. Matched to the pixel.</title>
+  <meta name="description" content="Turn your .sketch files into production-ready websites. Hand-crafted, responsive HTML5, modern CSS3, and JavaScript matched to the sub-pixel.">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       Apple-Style Design Tokens & Strict Brand Palette
+       Palette: #F9E6A8, #F2A900, #CC6F00, #4D2A00
+    ------------------------------------------------------------- */
+    :root {
+      --ps-cream: #F9E6A8;
+      --ps-gold: #F2A900;
+      --ps-ochre: #CC6F00;
+      --ps-espresso: #4D2A00;
+
+      /* Full-Width Edge-to-Edge Section Colors (Brand Palette) */
+      --canvas-bg: #FDF9EE;
+      --section-hero-bg: #1A0D02;
+      --section-services-bg: #FFFDF8;
+      --section-estimator-bg: #1A0D02;
+      --section-security-bg: #F7EECD;
+      --section-perf-bg: #FFFDF8;
+      --section-process-bg: #F8F3E2;
+      --section-intake-bg: #1A0D02;
+      --section-faq-bg: #FFFDF8;
+      --section-footer-bg: #120800;
+
+      --tile-dark-bg: #1A0D02;
+      --tile-light-bg: #FFFDF8;
+      --tile-dark-surface: #241302;
+      --tile-light-surface: #FFFFFF;
+      --tile-light-border: rgba(77, 42, 0, 0.1);
+      --tile-dark-border: rgba(249, 230, 168, 0.15);
+
+      --ink-primary: #4D2A00;
+      --ink-secondary: #7A4E1B;
+      --ink-tertiary: #A6753A;
+      --ink-light-text: #FFF8E7;
+      --ink-light-sub: #E2CCA0;
+
+      --apple-blue: #CC6F00;
+      --apple-blue-hover: #F2A900;
+      
+      --nav-height: 54px;
+      --nav-bg: rgba(253, 249, 238, 0.92);
+      --nav-border: rgba(77, 42, 0, 0.1);
+      
+      --tile-radius: 0;
+      --tile-radius-sm: 0;
+      --apple-ease: cubic-bezier(0.25, 1, 0.5, 1);
+      --btn-ease: cubic-bezier(0, 0, 0.58, 1);
+    }
+
+    /* Reset & Typography */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--canvas-bg);
+      color: var(--ink-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Plus Jakarta Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.47059;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+
+    /* -------------------------------------------------------------
+       Apple Global Navigation Bar
+    ------------------------------------------------------------- */
+    header#globalnav {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      height: var(--nav-height);
+      background: var(--nav-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--nav-border);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .globalnav-content {
+      max-width: 1024px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .globalnav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .globalnav-brand .brand-svg {
+      height: 33px;
+      width: auto;
+      display: block;
+    }
+    ul.globalnav-list {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+    .globalnav-link {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-primary);
+      opacity: 0.8;
+      letter-spacing: -0.01em;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+    .globalnav-link:hover {
+      opacity: 1;
+      color: var(--apple-blue);
+    }
+    .globalnav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* -------------------------------------------------------------
+       Apple Official Button Styles & Interactive States (Square / Sharp Edges)
+    ------------------------------------------------------------- */
+    .button {
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 14px;
+      line-height: 1.42857;
+      font-weight: 600;
+      letter-spacing: -0.016em;
+      padding: 11px 24px;
+      border-radius: 0;
+      background: var(--apple-blue);
+      color: #FFFFFF;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: all 0.2s var(--btn-ease);
+      font-family: inherit;
+    }
+    .button:hover {
+      background: var(--apple-blue-hover);
+      color: var(--ps-espresso);
+      transform: translateY(-1px);
+    }
+    .button:active {
+      transform: scale(0.97);
+    }
+
+    .button.button-secondary {
+      background: transparent;
+      border: 1.5px solid currentColor;
+      color: var(--apple-blue);
+      border-radius: 0;
+    }
+    .button.button-secondary:hover {
+      background: rgba(204, 111, 0, 0.12);
+      border-color: var(--apple-blue-hover);
+      color: var(--apple-blue-hover);
+      transform: translateY(-1px);
+    }
+    .button.button-secondary:active {
+      transform: scale(0.97);
+    }
+
+    /* Theme Dark Buttons */
+    .theme-dark .button {
+      background: var(--ps-gold);
+      color: var(--ps-espresso);
+      font-weight: 600;
+      border-radius: 0;
+    }
+    .theme-dark .button:hover {
+      background: #FFBF2E;
+      color: #000000;
+    }
+    .theme-dark .button.button-secondary {
+      background: transparent;
+      border: 1.5px solid rgba(249, 230, 168, 0.45);
+      color: var(--ps-cream);
+      border-radius: 0;
+    }
+    .theme-dark .button.button-secondary:hover {
+      background: rgba(249, 230, 168, 0.12);
+      border-color: var(--ps-gold);
+      color: #FFFFFF;
+    }
+
+    /* -------------------------------------------------------------
+       Full-Width Section Architecture (Edge-to-Edge Canvas Coverage)
+    ------------------------------------------------------------- */
+    main.main-apple {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding-top: 0;
+      margin-bottom: 0;
+      width: 100%;
+    }
+
+    .section-hero {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+    }
+
+    /* Edge-to-Edge Section Containers (Borderless, Covering Full Viewport Width) */
+    .tile-wrapper {
+      position: relative;
+      background: var(--tile-light-bg);
+      border: none;
+      border-radius: 0;
+      margin: 0;
+      padding: 96px 24px 68px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      color: var(--ink-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .tile-wrapper.theme-dark {
+      background: var(--tile-dark-bg);
+      border: none;
+      border-radius: 0;
+      color: var(--ink-light-text);
+    }
+    .tile-wrapper.theme-light {
+      background: var(--tile-light-bg);
+      border: none;
+      border-radius: 0;
+      color: var(--ink-primary);
+    }
+
+    /* Restored Distinct Brand Palette Section Colors */
+    .section-hero .tile-wrapper.theme-dark {
+      background: var(--section-hero-bg);
+      color: var(--ink-light-text);
+    }
+    #services .tile-wrapper.theme-light,
+    .section-hero #services {
+      background: var(--section-services-bg);
+      color: var(--ink-primary);
+    }
+    #estimator .tile-wrapper.theme-dark {
+      background: var(--section-estimator-bg);
+      color: var(--ink-light-text);
+    }
+    #security .tile-wrapper.theme-light {
+      background: var(--section-security-bg);
+      color: var(--ink-primary);
+    }
+    #performance .tile-wrapper.theme-light {
+      background: var(--section-perf-bg);
+      color: var(--ink-primary);
+    }
+    #process .tile-wrapper.theme-light {
+      background: var(--section-process-bg);
+      color: var(--ink-primary);
+    }
+    #intake .tile-wrapper.theme-dark {
+      background: var(--section-intake-bg);
+      color: var(--ink-light-text);
+    }
+    #faq .tile-wrapper.theme-light {
+      background: var(--section-faq-bg);
+      color: var(--ink-primary);
+    }
+
+    /* Typography Classes */
+    .tile-content {
+      max-width: 980px;
+      width: 100%;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .tile-copy-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      max-width: 780px;
+    }
+    .tile-eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--apple-blue);
+      margin-bottom: 2px;
+    }
+    .theme-dark .tile-eyebrow {
+      color: var(--ps-gold);
+    }
+    .tile-headline {
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 700;
+      line-height: 1.07143;
+      letter-spacing: -0.035em;
+      color: var(--ink-primary);
+    }
+    .theme-dark .tile-headline {
+      color: var(--ink-light-text);
+    }
+    .tile-subhead {
+      font-size: clamp(20px, 3vw, 28px);
+      line-height: 1.25;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      color: var(--ink-secondary);
+      max-width: 44ch;
+    }
+    .theme-dark .tile-subhead {
+      color: var(--ink-light-sub);
+    }
+    .tile-callout {
+      font-size: 14px;
+      line-height: 1.42857;
+      color: var(--ink-tertiary);
+      letter-spacing: -0.01em;
+      margin-top: 4px;
+    }
+    .theme-dark .tile-callout {
+      color: var(--ink-light-sub);
+      opacity: 0.85;
+    }
+
+    .tile-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Hero Interactive Device Showcase */
+    .tile-interactive-showcase {
+      width: 100%;
+      max-width: 980px;
+      margin-top: 36px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(249, 230, 168, 0.15);
+      border-radius: 0;
+      padding: 18px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    .theme-light .tile-interactive-showcase {
+      background: #FFFFFF;
+      border: 1px solid var(--tile-light-border);
+      box-shadow: 0 16px 40px rgba(77, 42, 0, 0.08);
+    }
+    .showcase-control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .theme-light .showcase-control-bar {
+      border-bottom-color: var(--tile-light-border);
+    }
+    .apple-segmented-tabs {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 0;
+      padding: 3px;
+      gap: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .theme-light .apple-segmented-tabs {
+      background: rgba(77, 42, 0, 0.07);
+      border-color: var(--tile-light-border);
+    }
+    .apple-tab-btn {
+      background: transparent;
+      border: 0;
+      color: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 0;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all 0.2s var(--apple-ease);
+      font-family: inherit;
+    }
+    .apple-tab-btn.active {
+      background: var(--ps-gold);
+      color: var(--ps-espresso);
+      opacity: 1;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    /* Before / After Slider (Apple Device Container) */
+    .ba-viewport {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      border-radius: 0;
+      overflow: hidden;
+      border: 1.5px solid rgba(249, 230, 168, 0.2);
+      user-select: none;
+      background: #110800;
+    }
+    .theme-light .ba-viewport {
+      border-color: var(--tile-light-border);
+    }
+    .ba-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .ba-layer.top-slice {
+      clip-path: inset(0 calc(100% - var(--slider-p, 50%)) 0 0);
+      border-right: 2.5px solid var(--ps-gold);
+      z-index: 3;
+    }
+    .ba-pill-tag {
+      position: absolute;
+      top: 14px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 5px 12px;
+      border-radius: 0;
+      z-index: 5;
+    }
+    .ba-pill-tag.l {
+      left: 14px;
+      background: var(--ps-espresso);
+      color: var(--ps-cream);
+      border: 1px solid var(--ps-gold);
+    }
+    .ba-pill-tag.r {
+      right: 14px;
+      background: var(--apple-blue);
+      color: #FFFFFF;
+    }
+    .ba-slider-touch {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: ew-resize;
+      z-index: 10;
+      margin: 0;
+    }
+    .ba-cursor-knob {
+      position: absolute;
+      top: 50%;
+      left: var(--slider-p, 50%);
+      transform: translate(-50%, -50%);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--ps-gold);
+      color: var(--ps-espresso);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 7;
+      pointer-events: none;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      border: 2px solid #FFFFFF;
+    }
+
+    /* Inner Mockup Windows */
+    .mock-pad {
+      padding: 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 12px;
+    }
+    .mock-sketch-window {
+      background: #FAFAF7;
+      background-image: 
+        linear-gradient(to right, #ECE8DA 1px, transparent 1px),
+        linear-gradient(to bottom, #ECE8DA 1px, transparent 1px);
+      background-size: 18px 18px;
+      color: #4D2A00;
+    }
+    .mock-live-window {
+      background: #FFFFFF;
+      color: #4D2A00;
+    }
+    .mock-nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ECE7D9;
+      font-weight: 700;
+    }
+    .mock-hero-banner {
+      background: linear-gradient(135deg, #FFF7DC 0%, #FDE49E 100%);
+      border: 1px solid #E8D3A0;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .mock-grid-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .mock-cell {
+      background: #FAF7EE;
+      border: 1px solid #E8DECA;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 11px;
+    }
+
+    /* Media Showcase */
+    .tile-image-full {
+      width: 100%;
+      max-width: 980px;
+      margin-top: 36px;
+      border-radius: 0;
+      overflow: hidden;
+      border: 1px solid var(--tile-light-border);
+      box-shadow: 0 16px 40px rgba(77, 42, 0, 0.08);
+    }
+    .tile-image-full img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* -------------------------------------------------------------
+       Interactive Cost Estimator (Full-Width Section Container)
+    ------------------------------------------------------------- */
+    .apple-calc-box {
+      width: 100%;
+      max-width: 580px;
+      margin-top: 32px;
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(249, 230, 168, 0.15);
+      border-radius: 0;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      text-align: left;
+    }
+
+    /* -------------------------------------------------------------
+       Performance Benchmark Metric Counters
+    ------------------------------------------------------------- */
+    .perf-metrics-row {
+      margin-top: 40px;
+      display: flex;
+      gap: 56px;
+      justify-content: center;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+    .perf-metric-num {
+      font-size: clamp(48px, 6vw, 68px);
+      font-weight: 800;
+      color: var(--apple-blue);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .perf-metric-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+    .theme-dark .perf-metric-label {
+      color: var(--ink-light-sub);
+    }
+      gap: 20px;
+      text-align: left;
+    }
+    .calc-row-spec {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: var(--ink-light-sub);
+    }
+    .calc-row-spec strong {
+      color: var(--ps-gold);
+    }
+    .apple-range-input {
+      width: 100%;
+      accent-color: var(--ps-gold);
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .apple-chips-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .apple-chip-opt {
+      position: relative;
+    }
+    .apple-chip-opt input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      cursor: pointer;
+    }
+    .apple-chip-opt label {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 0;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      color: var(--ink-light-text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .apple-chip-opt input:checked + label {
+      background: var(--ps-gold);
+      color: var(--ps-espresso);
+      border-color: var(--ps-gold);
+      font-weight: 600;
+      border-radius: 0;
+    }
+    .calc-price-badge {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      padding-top: 14px;
+      margin-top: 4px;
+    }
+    .calc-price-num {
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--ps-gold);
+      letter-spacing: -0.04em;
+    }
+
+    /* -------------------------------------------------------------
+       Client Intake Dropzone (Apple Store / Trade-in Style)
+    ------------------------------------------------------------- */
+    .apple-order-sheet {
+      width: 100%;
+      max-width: 640px;
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+    .apple-input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .apple-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .apple-field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-secondary);
+    }
+    .theme-dark .apple-field label {
+      color: var(--ink-light-sub);
+    }
+    .apple-input, .apple-select, .apple-textarea {
+      padding: 12px 14px;
+      border-radius: 0;
+      border: 1px solid var(--tile-light-border);
+      background: #FFFFFF;
+      color: var(--ink-primary);
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .theme-dark .apple-input,
+    .theme-dark .apple-select,
+    .theme-dark .apple-textarea {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(249, 230, 168, 0.2);
+      color: #FFFFFF;
+      border-radius: 0;
+    }
+    .apple-input:focus, .apple-select:focus, .apple-textarea:focus {
+      border-color: var(--apple-blue);
+      box-shadow: 0 0 0 3px rgba(204, 111, 0, 0.25);
+    }
+    .theme-dark .apple-input:focus,
+    .theme-dark .apple-select:focus,
+    .theme-dark .apple-textarea:focus {
+      border-color: var(--ps-gold);
+      box-shadow: 0 0 0 3px rgba(242, 169, 0, 0.3);
+    }
+
+    /* -------------------------------------------------------------
+       Apple-Style FAQ Section
+    ------------------------------------------------------------- */
+    .apple-faq-container {
+      width: 100%;
+      max-width: 820px;
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--tile-light-border);
+      text-align: left;
+    }
+    .theme-dark .apple-faq-container {
+      border-top-color: var(--tile-dark-border);
+    }
+    .apple-faq-item {
+      border-bottom: 1px solid var(--tile-light-border);
+    }
+    .theme-dark .apple-faq-item {
+      border-bottom-color: var(--tile-dark-border);
+    }
+    .apple-faq-trigger {
+      width: 100%;
+      padding: 20px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      border: 0;
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+    }
+    .apple-faq-icon {
+      font-size: 24px;
+      line-height: 1;
+      color: var(--apple-blue);
+      transition: transform 0.25s var(--apple-ease);
+    }
+    .theme-dark .apple-faq-icon {
+      color: var(--ps-gold);
+    }
+    .apple-faq-body {
+      display: none;
+      padding: 0 8px 20px;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--ink-secondary);
+    }
+    .theme-dark .apple-faq-body {
+      color: var(--ink-light-sub);
+    }
+    .apple-faq-item.open .apple-faq-body {
+      display: block;
+    }
+    .apple-faq-item.open .apple-faq-icon {
+      transform: rotate(45deg);
+    }
+
+    /* -------------------------------------------------------------
+       Apple Global Footer
+    ------------------------------------------------------------- */
+    footer#ac-globalfooter {
+      background: var(--section-footer-bg);
+      color: var(--ink-light-sub);
+      font-size: 12px;
+      line-height: 1.33337;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      padding: 48px 0 60px;
+      border-top: 1px solid rgba(249, 230, 168, 0.12);
+      width: 100%;
+      margin: 0;
+    }
+    .footer-inner {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 0 22px;
+    }
+    .footer-footnotes {
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(249, 230, 168, 0.1);
+      margin-bottom: 24px;
+      line-height: 1.5;
+      color: var(--ink-light-sub);
+      opacity: 0.85;
+    }
+    .footer-directory {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(249, 230, 168, 0.1);
+    }
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-light-text);
+      margin-bottom: 10px;
+    }
+    .footer-col-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--ink-light-sub);
+      opacity: 0.85;
+    }
+    .footer-col-list a:hover {
+      color: var(--ps-gold);
+      text-decoration: underline;
+    }
+    .footer-legal {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--ink-light-sub);
+      opacity: 0.85;
+    }
+
+    /* -------------------------------------------------------------
+       Responsive Behavior (Apple Mobile Grid & Navigation)
+    ------------------------------------------------------------- */
+    @media (max-width: 860px) {
+      .perf-metrics-row {
+        gap: 28px;
+      }
+      ul.globalnav-list {
+        display: none;
+      }
+      .apple-input-row {
+        grid-template-columns: 1fr;
+      }
+      .tile-wrapper {
+        padding: 44px 18px 36px;
+      }
+    }
+
+    /* =============================================================
+       Motion & Imagery Layer
+       (transform/opacity only; fully disabled for reduced-motion)
+    ============================================================= */
+
+    /* Pixel-grid backdrop + cursor glow on dark sections */
+    .tile-wrapper.theme-dark { overflow: hidden; isolation: isolate; }
+    .tile-wrapper.theme-dark::before {
+      content: "";
+      position: absolute;
+      inset: -32px;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(242,169,0,0.075) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(242,169,0,0.075) 1px, transparent 1px);
+      background-size: 32px 32px;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(ellipse at 50% 35%, #000 0%, transparent 75%);
+      animation: grid-drift 16s linear infinite;
+    }
+    .tile-wrapper.theme-dark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 30%), rgba(242,169,0,0.13), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .tile-wrapper.theme-dark:hover::after { opacity: 1; }
+    @keyframes grid-drift {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(32px, 32px, 0); }
+    }
+
+    /* Pulsing status dot */
+    .pulse-dot { position: relative; }
+    .pulse-dot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--ps-gold);
+      animation: pulse-ring 1.8s ease-out infinite;
+    }
+    @keyframes pulse-ring {
+      0%   { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(3.2); opacity: 0; }
+    }
+
+    /* Slider knob hint ring (removed after first interaction) */
+    .ba-cursor-knob::after {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      border: 2px solid var(--ps-gold);
+      animation: knob-ring 2s ease-out infinite;
+    }
+    .ba-viewport.interacted .ba-cursor-knob::after { display: none; }
+    @keyframes knob-ring {
+      0%   { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+
+    /* Button light sweep */
+    .button { position: relative; overflow: hidden; isolation: isolate; }
+    .button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.38) 50%, transparent 70%);
+      transform: translateX(-130%);
+    }
+    .button:hover::before {
+      transform: translateX(130%);
+      transition: transform 0.7s var(--apple-ease);
+    }
+
+    /* Scroll reveal (only active once JS confirms support) */
+    .reveal-ready .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.8s var(--apple-ease), transform 0.8s var(--apple-ease);
+      transition-delay: var(--d, 0ms);
+    }
+    .reveal-ready .reveal.in { opacity: 1; transform: none; }
+    .reveal-ready .tile-image-full img {
+      transform: scale(1.08);
+      transition: transform 1.8s var(--apple-ease);
+    }
+    .reveal-ready .tile-image-full.in img { transform: scale(1); }
+
+    /* Pipeline icons: stroke-draw */
+    .pipe-icon { display: block; margin-bottom: 14px; }
+    .reveal-ready .pipe-step .pipe-icon * { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .reveal-ready .pipe-step.in .pipe-icon * {
+      animation: icon-draw 1s var(--apple-ease) forwards;
+      animation-delay: calc(var(--d, 0ms) + 350ms);
+    }
+    @keyframes icon-draw { to { stroke-dashoffset: 0; } }
+
+    /* Performance counters */
+    .perf-metric-num {
+      position: relative;
+      display: inline-block;
+      font-variant-numeric: tabular-nums;
+    }
+    .perf-metric-num::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -10px;
+      height: 3px;
+      background: var(--ps-gold);
+      transform: scaleX(1);
+      transform-origin: left center;
+      transition: transform 1.4s var(--apple-ease);
+    }
+    .reveal-ready .perf-metric-num:not(.counted)::after { transform: scaleX(0); }
+    .perf-metric-label { margin-top: 18px; }
+
+    /* Price pop in the estimator */
+    .price-pop { animation: price-pop 0.45s var(--apple-ease); }
+    @keyframes price-pop {
+      0%   { transform: translateY(-4px) scale(1.06); filter: brightness(1.4); }
+      100% { transform: none; filter: none; }
+    }
+
+    /* Code inspector: line-by-line typing */
+    .code-line { display: block; }
+    .code-line.pending { visibility: hidden; }
+    .code-line.show { animation: line-in 0.35s steps(18) both; }
+    .code-line.caret::after {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 1em;
+      margin-left: 3px;
+      vertical-align: text-bottom;
+      background: var(--ps-gold);
+      animation: caret-blink 0.9s steps(1) infinite;
+    }
+    @keyframes line-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    @keyframes caret-blink { 50% { opacity: 0; } }
+
+    /* FAQ: smooth height (enabled by JS via .faq-ready) */
+    .apple-faq-container.faq-ready .apple-faq-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      padding: 0 8px;
+      visibility: hidden;
+      transition: grid-template-rows 0.4s var(--apple-ease), visibility 0s linear 0.4s;
+    }
+    .apple-faq-container.faq-ready .apple-faq-item.open .apple-faq-body {
+      display: grid;
+      grid-template-rows: 1fr;
+      visibility: visible;
+      transition: grid-template-rows 0.4s var(--apple-ease), visibility 0s;
+    }
+    .faq-inner { overflow: hidden; min-height: 0; }
+    .faq-pad { padding-bottom: 20px; }
+
+    /* Trust strip (ticker of claims already made on this page) */
+    .trust-strip {
+      background: var(--ps-gold);
+      color: var(--ps-espresso);
+      overflow: hidden;
+      border-top: 1px solid rgba(77,42,0,0.25);
+      border-bottom: 1px solid rgba(77,42,0,0.25);
+    }
+    .trust-track {
+      display: flex;
+      width: max-content;
+      animation: trust-scroll 38s linear infinite;
+    }
+    .trust-strip:hover .trust-track { animation-play-state: paused; }
+    .trust-list { display: flex; flex-shrink: 0; list-style: none; }
+    .trust-list li {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      padding: 15px 28px 15px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .trust-list li::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: var(--ps-espresso);
+    }
+    @keyframes trust-scroll { to { transform: translateX(-50%); } }
+
+    /* Large-file uploader (Amazon S3) */
+    .px-uploader-box {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 18px;
+      border: 2px dashed rgba(242, 169, 0, 0.55);
+      background: rgba(255, 255, 255, 0.04);
+      text-align: left;
+      transition: background 0.2s ease;
+    }
+    .px-uploader-box.drag { background: rgba(242, 169, 0, 0.12); }
+    .px-pick { display: inline-block; cursor: pointer; padding: 10px 20px; font-size: 15px; }
+    .px-pick-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+    .px-pick-input:focus-visible + .px-pick { outline: 2px solid #FFF; outline-offset: 2px; }
+    .px-uploader-hint { font-size: 12px; color: rgba(255,255,255,0.6); }
+    .px-file-list { list-style: none; width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .px-file { font-size: 13px; color: #FFF; }
+    .px-file-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; word-break: break-word; }
+    .px-file-remove { background: none; border: 0; color: rgba(255,255,255,0.7); font-size: 20px; line-height: 1; cursor: pointer; padding: 0 4px; }
+    .px-file-remove:hover { color: #FFF; }
+    .px-bar { height: 4px; background: rgba(255,255,255,0.15); margin-top: 6px; }
+    .px-bar > div { height: 100%; background: var(--ps-gold); transition: width 0.2s linear; }
+    .px-file.failed .px-bar > div { background: #FF8F6B; }
+    .px-file-error { color: #FF8F6B; margin-top: 4px; }
+    .px-uploader-status { font-size: 13px; line-height: 1.45; color: var(--ink-light-sub); word-break: break-word; }
+    .px-uploader-status.ok { color: var(--ps-gold); }
+    .px-uploader-status.bad { color: #FF8F6B; }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        transition-delay: 0s !important;
+      }
+      .trust-track { animation: none; flex-wrap: wrap; width: auto; }
+      .trust-list[aria-hidden="true"] { display: none; }
+      .pulse-dot::after, .ba-cursor-knob::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================
+       Apple Global Navigation Bar
+  ========================================================== -->
+  <header id="globalnav">
+    <div class="globalnav-content">
+      <a href="#top" class="globalnav-brand" aria-label="Pixelshift Home">
+        <svg class="brand-svg" viewBox="0 0 460 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(6, 14)">
+            <rect x="0" y="0" width="20" height="20" rx="4.5" fill="#4D2A00"/>
+            <rect x="0" y="26" width="20" height="20" rx="4.5" fill="#4D2A00"/>
+            <rect x="0" y="52" width="20" height="20" rx="4.5" fill="#4D2A00"/>
+            <rect x="26" y="0" width="20" height="20" rx="4.5" fill="#CC6F00"/>
+            <rect x="26" y="26" width="20" height="20" rx="4.5" fill="#F2A900"/>
+            <rect x="52" y="0" width="20" height="20" rx="4.5" fill="#F2A900"/>
+            <rect x="52" y="26" width="20" height="20" rx="4.5" fill="#CC6F00"/>
+            <rect x="54" y="54" width="18" height="18" rx="3.5" fill="#CC6F00"/>
+            <rect x="78" y="36" width="14" height="14" rx="3" fill="#F2A900"/>
+          </g>
+          <g transform="translate(132, 67)">
+            <text font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" font-size="48" letter-spacing="-0.03em" fill="currentColor">pi</text>
+            <g transform="translate(48, -40)">
+              <rect x="18" y="18" width="9" height="9" rx="1.5" fill="#CC6F00"/>
+              <rect x="8" y="8" width="9" height="9" rx="1.5" fill="#F2A900"/>
+              <rect x="0" y="0" width="8" height="8" rx="1.5" fill="#F9E6A8"/>
+              <rect x="28" y="28" width="9" height="9" rx="1.5" fill="#CC6F00"/>
+              <rect x="8" y="28" width="9" height="9" rx="1.5" fill="#F2A900"/>
+              <rect x="28" y="8" width="9" height="9" rx="1.5" fill="#F2A900"/>
+              <rect x="38" y="-2" width="7" height="7" rx="1.5" fill="#F2A900"/>
+            </g>
+            <text x="108" y="0" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-weight="700" font-size="48" letter-spacing="-0.03em">
+              <tspan fill="currentColor">el</tspan>
+              <tspan fill="#CC6F00">shift</tspan>
+            </text>
+            <circle cx="223" cy="-35" r="5.5" fill="#F2A900"/>
+          </g>
+        </svg>
+      </a>
+
+      <ul class="globalnav-list" role="navigation">
+        <li><a href="#services" class="globalnav-link">Overview</a></li>
+        <li><a href="#estimator" class="globalnav-link">Estimate</a></li>
+        <li><a href="#process" class="globalnav-link">Pipeline</a></li>
+        <li><a href="#faq" class="globalnav-link">FAQ</a></li>
+      </ul>
+
+      <div class="globalnav-actions">
+        <a href="#intake" class="button" style="padding: 7px 18px; font-size: 13px;">Get Quote</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-apple" role="main" id="top">
+    <!-- ==========================================================
+         Hero Section Billboard 1 (Theme Dark)
+    ========================================================== -->
+    <section class="section-hero">
+      <div class="tile-wrapper theme-dark">
+        <div class="tile-content">
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Hand-Crafted Frontend Studio</span>
+            <h1 class="tile-headline">Pixelshift</h1>
+            <p class="tile-subhead">Your Sketch files, hand-coded into living websites. Matched to the pixel.</p>
+            <p class="tile-callout">Human frontend engineers. Semantic HTML5 &amp; modern CSS. 24–48hr turnaround.</p>
+          </div>
+          <div class="tile-ctas">
+            <a class="button" href="#intake">Upload .Sketch File</a>
+            <a class="button button-secondary" href="#estimator">Estimate Pricing</a>
+          </div>
+
+          <!-- Hero Interactive Split Viewer -->
+          <div class="tile-interactive-showcase">
+            <div class="showcase-control-bar">
+              <span style="font-size:12px;font-weight:600;color:var(--ps-gold);display:flex;align-items:center;gap:6px;">
+                <span class="pulse-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ps-gold);"></span>
+                Sub-Pixel Accuracy Engine
+              </span>
+              <div class="apple-segmented-tabs">
+                <button class="apple-tab-btn active" data-tab="tab-slider">Interactive Compare</button>
+                <button class="apple-tab-btn" data-tab="tab-code">Code Inspect</button>
+              </div>
+            </div>
+
+            <!-- Tab 1: Interactive Slider -->
+            <div class="showcase-panel active" id="tab-slider">
+              <div class="ba-viewport" id="heroBaContainer" style="--slider-p: 50%;">
+                <!-- Live HTML/CSS Pane -->
+                <div class="ba-layer mock-live-window">
+                  <div class="mock-pad">
+                    <div class="mock-nav-row">
+                      <span>Pixelshift Production DOM</span>
+                      <span style="font-size:10px;font-weight:600;color:var(--apple-blue);">Live &bull; 99 Score</span>
+                    </div>
+                    <div class="mock-hero-banner">
+                      <div style="font-size:16px;font-weight:800;line-height:1.2;">Sub-pixel precision, rendered in clean DOM.</div>
+                      <div style="background:var(--apple-blue);color:#FFF;padding:4px 10px;border-radius:0;font-size:10px;width:max-content;font-weight:600;">Button</div>
+                    </div>
+                    <div class="mock-grid-cards">
+                      <div class="mock-cell"><strong>CSS Grid</strong><br>Fluid stretch</div>
+                      <div class="mock-cell"><strong>Tokens</strong><br>CSS variables</div>
+                      <div class="mock-cell"><strong>Lighthouse</strong><br>100ms load</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sketch Artboard Pane -->
+                <div class="ba-layer top-slice mock-sketch-window">
+                  <div class="mock-pad" style="border-right: 2px solid var(--ps-gold);">
+                    <div class="mock-nav-row" style="border-style:dashed;">
+                      <span style="font-family:monospace;font-size:11px;">#Artboard: Desktop_1440px</span>
+                      <span style="font-size:10px;color:var(--ps-ochre);">Layer: Nav_Bar</span>
+                    </div>
+                    <div style="border:1px dashed var(--ps-ochre);background:rgba(204,111,0,0.08);border-radius:8px;padding:14px;">
+                      <span style="font-size:9px;font-family:monospace;background:var(--ps-ochre);color:#fff;padding:1px 4px;border-radius:2px;">Text_Symbol</span>
+                      <div style="font-size:16px;font-weight:700;margin-top:4px;">Sub-pixel precision, rendered in clean DOM.</div>
+                      <div style="border:1px dashed var(--ps-gold);padding:3px 8px;display:inline-block;border-radius:0;margin-top:6px;font-size:9px;">btn_primary</div>
+                    </div>
+                    <div class="mock-grid-cards">
+                      <div class="mock-cell" style="border-style:dashed;">Symbol_1</div>
+                      <div class="mock-cell" style="border-style:dashed;">Symbol_2</div>
+                      <div class="mock-cell" style="border-style:dashed;">Symbol_3</div>
+                    </div>
+                  </div>
+                </div>
+
+                <span class="ba-pill-tag l">Sketch Artboard</span>
+                <span class="ba-pill-tag r">Compiled HTML/CSS</span>
+                <div class="ba-cursor-knob" aria-hidden="true">&#8596;</div>
+                <input type="range" min="0" max="100" value="50" class="ba-slider-touch" id="heroBaSlider" aria-label="Drag slider to compare Sketch artboard to live code">
+              </div>
+              <p style="margin-top:10px;font-size:12px;opacity:0.75;text-align:center;">Drag to compare the design file with the compiled frontend.</p>
+            </div>
+
+            <!-- Tab 2: Code Inspect -->
+            <div class="showcase-panel" id="tab-code" style="display:none;">
+              <div style="background:#0D0600;color:var(--ps-cream);border-radius:0;padding:18px;text-align:left;font-size:13px;max-height:280px;overflow-y:auto;border:1px solid rgba(255,255,255,0.1);">
+<pre><code><span style="color:#7A4E1B;">/* 100% Hand-Crafted CSS Tokens */</span>
+<span style="color:#F2A900;">:root</span> {
+  <span style="color:#F9E6A8;">--ps-bg</span>: <span style="color:#CC6F00;">#F5F2E9</span>;
+  <span style="color:#F9E6A8;">--ps-primary</span>: <span style="color:#CC6F00;">#CC6F00</span>;
+  <span style="color:#F9E6A8;">--ps-accent</span>: <span style="color:#F2A900;">#F2A900</span>;
+  <span style="color:#F9E6A8;">--ps-espresso</span>: <span style="color:#CC6F00;">#4D2A00</span>;
+}
+
+<span style="color:#7A4E1B;">&lt;!-- Clean, zero-bloat semantic markup --&gt;</span>
+<span style="color:#FF8F6B;">&lt;header</span> <span style="color:#F9E6A8;">class</span>=<span style="color:#8BE9FD;">"globalnav"</span><span style="color:#FF8F6B;">&gt;</span>
+  <span style="color:#FF8F6B;">&lt;a</span> <span style="color:#F9E6A8;">class</span>=<span style="color:#8BE9FD;">"button"</span> <span style="color:#F9E6A8;">href</span>=<span style="color:#8BE9FD;">"#intake"</span><span style="color:#FF8F6B;">&gt;</span>Upload .Sketch<span style="color:#FF8F6B;">&lt;/a&gt;</span>
+<span style="color:#FF8F6B;">&lt;/header&gt;</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Billboard 2 (Theme Light) -->
+      <div class="tile-wrapper theme-light" id="services">
+        <div class="tile-content">
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Zero Auto-Export Bloat</span>
+            <h2 class="tile-headline">Crafted by humans. Built to endure.</h2>
+            <p class="tile-subhead">Every button, spacing token, and responsive breakpoint is hand-authored for speed, accessibility, and clean developer handover.</p>
+          </div>
+          <div class="tile-ctas">
+            <a class="button" href="#estimator">Configure Your Project</a>
+            <a class="button button-secondary" href="#process">See the 4-Step Pipeline</a>
+          </div>
+          <div class="tile-image-full">
+            <img src="assets/sketch-to-code-transformation.jpg" alt="Visual representation of Sketch layers transforming into production frontend code">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust strip: claims already made elsewhere on this page -->
+    <div class="trust-strip" role="region" aria-label="Pixelshift at a glance">
+      <div class="trust-track">
+        <ul class="trust-list"><li>24–48hr turnaround</li><li>Hand-coded HTML5 &amp; CSS3</li><li>Strict NDA on every project</li><li>Fixed price within 4 hours</li><li>98+ Lighthouse out of the box</li><li>Zero auto-export bloat</li></ul>
+        <ul class="trust-list" aria-hidden="true"><li>24–48hr turnaround</li><li>Hand-coded HTML5 &amp; CSS3</li><li>Strict NDA on every project</li><li>Fixed price within 4 hours</li><li>98+ Lighthouse out of the box</li><li>Zero auto-export bloat</li></ul>
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         Full-Width Section: Know your cost upfront (Instant Calculator)
+    ========================================================== -->
+    <section id="estimator">
+      <div class="tile-wrapper theme-dark">
+        <div class="tile-content">
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Instant Calculator</span>
+            <h2 class="tile-headline">Know your cost upfront.</h2>
+            <p class="tile-subhead">Transparent pricing with zero hidden fees. Select your project requirements.</p>
+          </div>
+
+          <div class="apple-calc-box">
+            <div class="calc-row-spec">
+              <span>Artboards / Pages: <strong id="pagesCountLabel">1 Page (Landing)</strong></span>
+              <span style="font-size:12px;opacity:0.8;">Full sub-sections</span>
+            </div>
+            <input type="range" min="1" max="12" value="1" class="apple-range-input" id="artboardSlider" aria-label="Artboards and Pages Slider">
+
+            <div class="calc-row-spec"><span>Target Code Stack</span></div>
+            <div class="apple-chips-selector">
+              <div class="apple-chip-opt">
+                <input type="radio" name="calc_stack" id="stack_html" value="html" checked>
+                <label for="stack_html">HTML5/CSS3</label>
+              </div>
+              <div class="apple-chip-opt">
+                <input type="radio" name="calc_stack" id="stack_tw" value="tailwind">
+                <label for="stack_tw">Tailwind CSS</label>
+              </div>
+              <div class="apple-chip-opt">
+                <input type="radio" name="calc_stack" id="stack_react" value="react">
+                <label for="stack_react">React / Next</label>
+              </div>
+            </div>
+
+            <div class="calc-row-spec"><span>Turnaround Speed</span></div>
+            <div class="apple-chips-selector">
+              <div class="apple-chip-opt">
+                <input type="radio" name="calc_speed" id="speed_std" value="std" checked>
+                <label for="speed_std">Standard</label>
+              </div>
+              <div class="apple-chip-opt">
+                <input type="radio" name="calc_speed" id="speed_exp" value="exp">
+                <label for="speed_exp">48h Express</label>
+              </div>
+              <div class="apple-chip-opt">
+                <input type="radio" name="calc_speed" id="speed_rush" value="rush">
+                <label for="speed_rush">24h Rush</label>
+              </div>
+            </div>
+
+            <div class="calc-price-badge">
+              <div>
+                <div class="calc-price-num" id="calcPriceDisplay">$280</div>
+                <div style="font-size:12px;color:var(--ink-light-sub);" id="calcTurnaroundDisplay">Estimated Delivery: 3 Business Days</div>
+              </div>
+              <button type="button" class="button" id="applyQuoteBtn" style="padding: 10px 22px;">Lock In &amp; Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         Full-Width Section: Strict NDA & Enterprise Security
+    ========================================================== -->
+    <section id="security">
+      <div class="tile-wrapper theme-light">
+        <div class="tile-content">
+          <div style="display:flex;align-items:center;justify-content:center;margin-bottom:8px;">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--apple-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="0" ry="0"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              <circle cx="12" cy="16" r="1.2" fill="var(--apple-blue)"/>
+              <line x1="12" y1="17.2" x2="12" y2="19"/>
+            </svg>
+          </div>
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Enterprise Security</span>
+            <h2 class="tile-headline">Strict NDA. Your designs stay private.</h2>
+            <p class="tile-callout" style="max-width:540px;margin-top:6px;">Files processed in private sandboxes under mutual NDA. Zero leaks. 100% confidential guarantee.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         Full-Width Section: Ultra-Fast Performance
+    ========================================================== -->
+    <section id="performance">
+      <div class="tile-wrapper theme-light">
+        <div class="tile-content">
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Ultra-Fast Performance</span>
+            <h2 class="tile-headline">98+ Lighthouse scores out of the box.</h2>
+            <p class="tile-subhead">Next-gen WebP assets, minified modern CSS, and clean semantic structures ensure near-instant page loads.</p>
+          </div>
+          <div class="tile-ctas">
+            <a class="button" href="#intake">Request Fast-Track Quote</a>
+          </div>
+          <div class="perf-metrics-row">
+            <div>
+              <div class="perf-metric-num" data-count="100">100</div>
+              <div class="perf-metric-label">Performance</div>
+            </div>
+            <div>
+              <div class="perf-metric-num" data-count="100">100</div>
+              <div class="perf-metric-label">Accessibility</div>
+            </div>
+            <div>
+              <div class="perf-metric-num" data-count="100">100</div>
+              <div class="perf-metric-label">Best Practices</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         Apple-Style 4-Step Pipeline Billboard
+    ========================================================== -->
+    <section id="process">
+      <div class="tile-wrapper theme-light" style="padding-bottom:56px;">
+        <div class="tile-content">
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Workflow</span>
+            <h2 class="tile-headline">The 4-Step Pipeline.</h2>
+            <p class="tile-subhead">Predictable, transparent, and built around your design deadlines.</p>
+          </div>
+          <div class="tile-ctas">
+            <a class="button" href="#intake">Get started</a>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:36px;width:100%;max-width:1020px;margin-top:54px;text-align:left;">
+            <div class="pipe-step" style="border-top:2px solid var(--apple-blue);padding-top:18px;"><svg class="pipe-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--apple-blue)" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path pathLength="1" d="M12 16V4"/><path pathLength="1" d="M7 9l5-5 5 5"/><path pathLength="1" d="M4 15v5h16v-5"/></svg>
+              <div style="font-size:12px;font-weight:700;color:var(--apple-blue);margin-bottom:8px;letter-spacing:0.08em;">01 &bull; UPLOAD</div>
+              <strong style="font-size:17px;display:block;margin-bottom:6px;color:var(--ink-primary);">Send .Sketch File</strong>
+              <p style="font-size:14px;color:var(--ink-secondary);line-height:1.5;">Share your design file or cloud link with any animation notes.</p>
+            </div>
+            <div class="pipe-step" style="border-top:2px solid var(--apple-blue);padding-top:18px;"><svg class="pipe-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--apple-blue)" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><circle pathLength="1" cx="10.5" cy="10.5" r="6.5"/><path pathLength="1" d="M15.5 15.5L21 21"/></svg>
+              <div style="font-size:12px;font-weight:700;color:var(--apple-blue);margin-bottom:8px;letter-spacing:0.08em;">02 &bull; REVIEW</div>
+              <strong style="font-size:17px;display:block;margin-bottom:6px;color:var(--ink-primary);">Architecture Audit</strong>
+              <p style="font-size:14px;color:var(--ink-secondary);line-height:1.5;">We review artboards and confirm a guaranteed fixed price within 4 hours.</p>
+            </div>
+            <div class="pipe-step" style="border-top:2px solid var(--apple-blue);padding-top:18px;"><svg class="pipe-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--apple-blue)" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><path pathLength="1" d="M8 7l-5 5 5 5"/><path pathLength="1" d="M16 7l5 5-5 5"/><path pathLength="1" d="M14 4l-4 16"/></svg>
+              <div style="font-size:12px;font-weight:700;color:var(--apple-blue);margin-bottom:8px;letter-spacing:0.08em;">03 &bull; BUILD</div>
+              <strong style="font-size:17px;display:block;margin-bottom:6px;color:var(--ink-primary);">Pixel-Match Coding</strong>
+              <p style="font-size:14px;color:var(--ink-secondary);line-height:1.5;">Hand-coded with sub-pixel overlay testing against your original artboards.</p>
+            </div>
+            <div class="pipe-step" style="border-top:2px solid var(--apple-blue);padding-top:18px;"><svg class="pipe-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--apple-blue)" stroke-width="1.8" stroke-linecap="square" aria-hidden="true"><rect pathLength="1" x="3" y="4" width="18" height="16"/><path pathLength="1" d="M3 9h18"/><path pathLength="1" d="M8 15l3 3 5-6"/></svg>
+              <div style="font-size:12px;font-weight:700;color:var(--apple-blue);margin-bottom:8px;letter-spacing:0.08em;">04 &bull; STAGING</div>
+              <strong style="font-size:17px;display:block;margin-bottom:6px;color:var(--ink-primary);">Review &amp; Handover</strong>
+              <p style="font-size:14px;color:var(--ink-secondary);line-height:1.5;">Test on live staging, request adjustments, and receive clean deliverables.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         Apple-Style Client Intake Tile (Order & Upload Studio)
+    ========================================================== -->
+    <section id="intake">
+      <div class="tile-wrapper theme-dark" style="padding-bottom:64px;">
+        <div class="tile-content">
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Start Your Project</span>
+            <h2 class="tile-headline">Upload your .Sketch file.</h2>
+            <p class="tile-subhead">Receive a guaranteed fixed quote and delivery timeline within 4 business hours.</p>
+          </div>
+
+          <form class="apple-order-sheet" id="projectIntakeForm" novalidate>
+            <input type="text" id="hpField" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+            <div class="apple-input-row">
+              <div class="apple-field">
+                <label for="clientName">Your Name *</label>
+                <input type="text" class="apple-input" id="clientName" required placeholder="Alex Morgan" autocomplete="name">
+              </div>
+              <div class="apple-field">
+                <label for="clientEmail">Work Email *</label>
+                <input type="email" class="apple-input" id="clientEmail" required placeholder="alex@studio.com" autocomplete="email">
+              </div>
+            </div>
+
+            <div class="apple-input-row">
+              <div class="apple-field">
+                <label for="projectStackSelect">Target Format</label>
+                <select class="apple-select" id="projectStackSelect">
+                  <option value="html">Clean HTML5 / CSS3 (Default)</option>
+                  <option value="tailwind">Tailwind CSS</option>
+                  <option value="react">React / Next.js Components</option>
+                  <option value="wordpress">WordPress Ready Front-End</option>
+                </select>
+              </div>
+              <div class="apple-field">
+                <label for="projectUrgencySelect">Turnaround Speed</label>
+                <select class="apple-select" id="projectUrgencySelect">
+                  <option value="std">Standard (3–4 Business Days)</option>
+                  <option value="exp">Express (48 Hours)</option>
+                  <option value="rush">24-Hour Rush Delivery</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="apple-field">
+              <label>Upload Your .Sketch File(s) &mdash; up to 500MB each</label>
+              <div class="px-uploader-box" id="pxDrop">
+                <input type="file" id="pxFileInput" class="px-pick-input" multiple>
+                <label for="pxFileInput" class="button px-pick">Choose file(s)</label>
+                <p class="px-uploader-hint">or drag and drop here. Files go straight to our private storage.</p>
+                <ul class="px-file-list" id="pxFileList"></ul>
+                <p class="px-uploader-status" id="uploadStatus" role="status" aria-live="polite">No file selected yet.</p>
+              </div>
+            </div>
+
+            <div class="apple-field">
+              <label for="cloudLink">Or Share Cloud Link (optional)</label>
+              <input type="url" class="apple-input" id="cloudLink" placeholder="https://sketch.cloud/s/... or Google Drive link">
+            </div>
+
+            <div class="apple-field">
+              <label for="projectNotes">Project Specifications &amp; Notes</label>
+              <textarea class="apple-textarea" id="projectNotes" rows="3" placeholder="Number of artboards, desired interactive states, or specific delivery needs..."></textarea>
+            </div>
+
+            <p id="formError" role="alert" style="display:none;background:rgba(204,111,0,0.18);border:1px solid var(--ps-ochre);color:#FFF;padding:10px 14px;font-size:14px;line-height:1.45;text-align:left;"></p>
+
+            <div class="tile-ctas" style="width:100%;margin-top:10px;">
+              <button type="submit" id="submitBtn" class="button" style="width:100%;padding:13px;font-size:16px;">
+                Request Guaranteed Quote &rarr;
+              </button>
+            </div>
+          </form>
+
+          <!-- Confirmation Card -->
+          <div id="intakeConfirmationBox" style="display:none;background:rgba(255,255,255,0.06);border:1px solid var(--ps-gold);border-radius:0;padding:36px;max-width:540px;width:100%;margin-top:24px;text-align:center;">
+            <div style="width:48px;height:48px;background:var(--ps-gold);color:var(--ps-espresso);display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--ps-espresso)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <h3 style="font-size:22px;color:#FFFFFF;margin-bottom:8px;">Request Sent</h3>
+            <p style="font-size:14px;color:var(--ink-light-sub);line-height:1.5;">Thanks, we have your project details. Your fixed quote will be emailed to you within 4 business hours.</p>
+            <div style="background:rgba(0,0,0,0.3);border-radius:0;padding:14px;margin:20px 0;text-align:left;font-size:13px;color:#FFF;">
+              <div>Client: <span id="confirmName"></span> (<span id="confirmEmail"></span>)</div>
+              <div style="margin-top:4px;">Estimator quote: <strong id="confirmEstimate" style="color:var(--ps-gold);">$280</strong></div>
+            </div>
+            <button type="button" class="button button-secondary" id="resetFormBtn">Submit Another File</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         Apple-Style FAQ Accordion Tile
+    ========================================================== -->
+    <section id="faq">
+      <div class="tile-wrapper theme-light">
+        <div class="tile-content">
+          <div class="tile-copy-wrapper">
+            <span class="tile-eyebrow">Questions &amp; Answers</span>
+            <h2 class="tile-headline">Frequently Asked Questions.</h2>
+          </div>
+
+          <div class="apple-faq-container">
+            <div class="apple-faq-item">
+              <button class="apple-faq-trigger" type="button">
+                <span>Which versions of Sketch are supported?</span>
+                <span class="apple-faq-icon">+</span>
+              </button>
+              <div class="apple-faq-body">
+                We support all versions of Sketch, including legacy files and the latest Sketch workspace releases, as well as Sketch Cloud shared links. Layer symbols, text styles, and artboards are completely preserved.
+              </div>
+            </div>
+
+            <div class="apple-faq-item">
+              <button class="apple-faq-trigger" type="button">
+                <span>How does the sub-pixel match guarantee work?</span>
+                <span class="apple-faq-icon">+</span>
+              </button>
+              <div class="apple-faq-body">
+                We perform side-by-side overlay testing comparing your original Sketch artboard directly with the rendered browser window in Chrome, Safari, and Firefox. Typographic weights, letter-spacing, shadows, and margins match 1:1.
+              </div>
+            </div>
+
+            <div class="apple-faq-item">
+              <button class="apple-faq-trigger" type="button">
+                <span>Do you sign Non-Disclosure Agreements (NDAs)?</span>
+                <span class="apple-faq-icon">+</span>
+              </button>
+              <div class="apple-faq-body">
+                Yes. We regularly work as white-label engineering partners for design studios and agencies. We are happy to execute your mutual NDA prior to file handoff.
+              </div>
+            </div>
+
+            <div class="apple-faq-item">
+              <button class="apple-faq-trigger" type="button">
+                <span>What deliverables will I receive?</span>
+                <span class="apple-faq-icon">+</span>
+              </button>
+              <div class="apple-faq-body">
+                You receive an organized ZIP package with semantic HTML5 markup, modular CSS/Tailwind stylesheets, vanilla JS scripts, optimized media assets, and clean documentation.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================
+     Apple Global Footer (ac-globalfooter)
+  ========================================================== -->
+  <footer id="ac-globalfooter">
+    <div class="footer-inner">
+      <div class="footer-footnotes">
+        1. Sub-pixel match guarantee includes 30 days of complimentary layout revisions and bug fixes from initial delivery.<br>
+        2. Delivery turnaround begins upon confirmation of file receipt and architecture audit approval.<br>
+        3. All product designs and client Sketch files remain the confidential intellectual property of the respective owners.
+      </div>
+
+      <div class="footer-directory">
+        <div>
+          <h4 class="footer-col-title">Contact</h4>
+          <ul class="footer-col-list">
+            <li><a href="mailto:pixelshift.com@gmail.com">pixelshift.com@gmail.com</a></li>
+            <li><a href="#intake">Request a Quote</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <div>Copyright &copy; 2026 Pixelshift Inc. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================
+       Client-Side Behaviors
+  ========================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. Apple Segmented Tabs
+      var tabBtns = document.querySelectorAll('.apple-tab-btn');
+      tabBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          tabBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var targetTabId = btn.getAttribute('data-tab');
+          document.querySelectorAll('.showcase-panel').forEach(function (p) {
+            p.style.display = 'none';
+          });
+          var target = document.getElementById(targetTabId);
+          if (target) target.style.display = 'block';
+        });
+      });
+
+      // 3. Before / After Slider
+      var heroBaContainer = document.getElementById('heroBaContainer');
+      var heroBaSlider = document.getElementById('heroBaSlider');
+      if (heroBaContainer && heroBaSlider) {
+        heroBaSlider.addEventListener('input', function (e) {
+          heroBaContainer.style.setProperty('--slider-p', e.target.value + '%');
+        });
+      }
+
+      // 4. Cost Estimator
+      var artboardSlider = document.getElementById('artboardSlider');
+      var pagesCountLabel = document.getElementById('pagesCountLabel');
+      var calcPriceDisplay = document.getElementById('calcPriceDisplay');
+      var calcTurnaroundDisplay = document.getElementById('calcTurnaroundDisplay');
+      var applyQuoteBtn = document.getElementById('applyQuoteBtn');
+
+      function recalculateQuote() {
+        var pages = parseInt(artboardSlider.value, 10);
+        pagesCountLabel.textContent = pages === 1 ? '1 Page (Landing)' : pages + ' Pages';
+
+        var basePrice = 280 + (pages - 1) * 170;
+
+        var stackChoice = document.querySelector('input[name="calc_stack"]:checked').value;
+        if (stackChoice === 'tailwind') basePrice += 40 * pages;
+        else if (stackChoice === 'react') basePrice += 90 * pages;
+
+        var speedChoice = document.querySelector('input[name="calc_speed"]:checked').value;
+        var estDays = Math.max(2, Math.round(pages * 0.8) + 2);
+
+        if (speedChoice === 'rush') {
+          basePrice *= 1.6;
+          calcTurnaroundDisplay.textContent = 'Estimated Delivery: 24-Hour Rush Service';
+        } else if (speedChoice === 'exp') {
+          basePrice *= 1.3;
+          calcTurnaroundDisplay.textContent = 'Estimated Delivery: 48-Hour Express';
+        } else {
+          calcTurnaroundDisplay.textContent = 'Estimated Delivery: ' + estDays + ' Business Days';
+        }
+
+        var total = Math.round(basePrice);
+        calcPriceDisplay.textContent = '$' + total;
+        return total;
+      }
+
+      if (artboardSlider) {
+        artboardSlider.addEventListener('input', recalculateQuote);
+        document.querySelectorAll('input[name="calc_stack"], input[name="calc_speed"]').forEach(function (el) {
+          el.addEventListener('change', recalculateQuote);
+        });
+        recalculateQuote();
+      }
+
+      if (applyQuoteBtn) {
+        applyQuoteBtn.addEventListener('click', function () {
+          var quote = calcPriceDisplay.textContent;
+          var pages = artboardSlider.value;
+          var notes = document.getElementById('projectNotes');
+          if (notes) notes.value = 'Quote Locked: ' + quote + ' for ' + pages + ' artboard(s).';
+          var intake = document.getElementById('intake');
+          if (intake) {
+            intake.scrollIntoView({ behavior: 'smooth' });
+            var nameField = document.getElementById('clientName');
+            if (nameField) nameField.focus();
+          }
+        });
+      }
+
+      // 5. Large-file uploads straight to Amazon S3
+      //    The Lambda "signer" (see aws/SETUP.md) hands back a short-lived upload address;
+      //    the browser then sends the file directly to the private bucket.
+      var UPLOAD_CONFIG = {
+        signerUrl: 'https://qvbvvew2mowlcipne3kcyxjmle0mynwl.lambda-url.eu-north-1.on.aws/',
+        bucket: 'pixelshift-uploads-k7x2q',
+        region: 'eu-north-1',
+        maxBytes: 500 * 1024 * 1024
+      };
+      var uploadsEnabled = /^https:\/\//.test(UPLOAD_CONFIG.signerUrl);
+      var pxFiles = [];
+      var pxInput = document.getElementById('pxFileInput');
+      var pxDrop = document.getElementById('pxDrop');
+      var pxList = document.getElementById('pxFileList');
+      var uploadStatus = document.getElementById('uploadStatus');
+
+      function fmtMB(b) { return (b / (1024 * 1024)).toFixed(1) + ' MB'; }
+      function setUploadStatus(text, cls) {
+        uploadStatus.textContent = text;
+        uploadStatus.className = 'px-uploader-status' + (cls ? ' ' + cls : '');
+      }
+      function renderUploads() {
+        pxList.innerHTML = '';
+        pxFiles.forEach(function (f) {
+          var li = document.createElement('li');
+          li.className = 'px-file ' + f.status;
+          var top = document.createElement('div');
+          top.className = 'px-file-top';
+          var label = document.createElement('span');
+          label.textContent = f.file.name + ' (' + fmtMB(f.file.size) + ')';
+          var rm = document.createElement('button');
+          rm.type = 'button';
+          rm.className = 'px-file-remove';
+          rm.setAttribute('aria-label', 'Remove ' + f.file.name);
+          rm.textContent = '\u00D7';
+          rm.addEventListener('click', function () { removeUpload(f); });
+          top.appendChild(label); top.appendChild(rm);
+          var bar = document.createElement('div');
+          bar.className = 'px-bar';
+          var fill = document.createElement('div');
+          fill.style.width = f.progress + '%';
+          bar.appendChild(fill);
+          li.appendChild(top); li.appendChild(bar);
+          if (f.status === 'failed') {
+            var er = document.createElement('div');
+            er.className = 'px-file-error';
+            er.textContent = f.error || 'Upload failed.';
+            li.appendChild(er);
+          }
+          pxList.appendChild(li);
+        });
+        var up = pxFiles.filter(function (f) { return f.status === 'uploading'; });
+        var done = pxFiles.filter(function (f) { return f.status === 'done'; });
+        var bad = pxFiles.filter(function (f) { return f.status === 'failed'; });
+        if (!uploadsEnabled) {
+          setUploadStatus('File uploads are not available right now. Please paste a cloud link below instead.', 'bad');
+        } else if (up.length) {
+          var avg = up.reduce(function (n, f) { return n + f.progress; }, 0) / up.length;
+          setUploadStatus('Uploading\u2026 ' + Math.round(avg) + '%. Please keep this page open.');
+        } else if (bad.length && !done.length) {
+          setUploadStatus('Upload failed. Please try again, or paste a cloud link below.', 'bad');
+        } else if (done.length) {
+          setUploadStatus('\u2713 ' + done.length + ' file' + (done.length > 1 ? 's' : '') + ' uploaded.', 'ok');
+        } else {
+          setUploadStatus('No file selected yet.');
+        }
+      }
+      function removeUpload(f) {
+        f.status = 'removed';
+        if (f.xhr) { try { f.xhr.abort(); } catch (e) {} }
+        pxFiles = pxFiles.filter(function (x) { return x !== f; });
+        renderUploads();
+      }
+      function putFile(f, url) {
+        return new Promise(function (resolve, reject) {
+          var xhr = new XMLHttpRequest();
+          f.xhr = xhr;
+          xhr.open('PUT', url);
+          xhr.upload.onprogress = function (ev) {
+            if (ev.lengthComputable) { f.progress = Math.round(ev.loaded / ev.total * 100); renderUploads(); }
+          };
+          xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) { resolve(); return; }
+            var m = /<Code>([^<]+)<\/Code>/.exec(xhr.responseText || '');
+            reject(new Error('The upload was rejected (' + xhr.status + (m ? ' ' + m[1] : '') + ').'));
+          };
+          xhr.onerror = function () { reject(new Error('The connection was interrupted.')); };
+          xhr.onabort = function () { reject(new Error('Cancelled.')); };
+          xhr.send(f.file);
+        });
+      }
+      function startUpload(f) {
+        fetch(UPLOAD_CONFIG.signerUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: f.file.name, size: f.file.size, contentType: f.file.type || 'application/octet-stream' })
+        })
+          .then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (d) {
+              if (!r.ok) throw new Error(d.error || 'Could not start the upload.');
+              return d;
+            });
+          })
+          .then(function (d) { f.key = d.key; return putFile(f, d.uploadUrl); })
+          .then(function () { if (f.status === 'removed') return; f.status = 'done'; f.progress = 100; renderUploads(); })
+          .catch(function (err) {
+            if (f.status === 'removed') return;
+            f.status = 'failed';
+            f.error = err && err.message ? err.message : 'Upload failed.';
+            renderUploads();
+          });
+      }
+      function addFiles(list) {
+        Array.prototype.forEach.call(list, function (file) {
+          var f = { file: file, status: 'uploading', progress: 0, key: '', error: '', xhr: null };
+          if (file.size > UPLOAD_CONFIG.maxBytes) { f.status = 'failed'; f.error = 'That file is over the 500MB limit. Please paste a cloud link below.'; }
+          else if (file.size === 0) { f.status = 'failed'; f.error = 'That file looks empty.'; }
+          pxFiles.push(f);
+          if (f.status === 'uploading') startUpload(f);
+        });
+        renderUploads();
+      }
+      if (pxInput) {
+        if (!uploadsEnabled) pxInput.disabled = true;
+        pxInput.addEventListener('change', function () { if (pxInput.files.length) addFiles(pxInput.files); pxInput.value = ''; });
+      }
+      if (pxDrop && uploadsEnabled) {
+        ['dragenter', 'dragover'].forEach(function (ev) { pxDrop.addEventListener(ev, function (e) { e.preventDefault(); pxDrop.classList.add('drag'); }); });
+        ['dragleave', 'drop'].forEach(function (ev) { pxDrop.addEventListener(ev, function (e) { e.preventDefault(); pxDrop.classList.remove('drag'); }); });
+        pxDrop.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+      }
+      renderUploads();
+
+      // 6. Form Submission: emailed to the studio inbox via FormSubmit
+      //    (first ever submission triggers a one-time activation email to this address)
+      var FORM_ENDPOINT = 'https://formsubmit.co/ajax/pixelshift.com@gmail.com';
+      var intakeForm = document.getElementById('projectIntakeForm');
+      var confirmBox = document.getElementById('intakeConfirmationBox');
+      var resetBtn = document.getElementById('resetFormBtn');
+      var submitBtn = document.getElementById('submitBtn');
+      var formError = document.getElementById('formError');
+      var submitLabel = submitBtn ? submitBtn.innerHTML : '';
+
+      function showError(msg) { formError.textContent = msg; formError.style.display = 'block'; }
+      function clearError() { formError.style.display = 'none'; formError.textContent = ''; }
+      function selText(id) {
+        var el = document.getElementById(id);
+        return el && el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : '';
+      }
+      function endSending() { submitBtn.disabled = false; submitBtn.innerHTML = submitLabel; }
+      function consoleUrl(key) {
+        return 'https://s3.console.aws.amazon.com/s3/object/' + encodeURIComponent(UPLOAD_CONFIG.bucket) +
+          '?region=' + encodeURIComponent(UPLOAD_CONFIG.region) + '&prefix=' + encodeURIComponent(key);
+      }
+      function showConfirmation(name, email, price) {
+        document.getElementById('confirmName').textContent = name;
+        document.getElementById('confirmEmail').textContent = email;
+        document.getElementById('confirmEstimate').textContent = price;
+        intakeForm.style.display = 'none';
+        confirmBox.style.display = 'block';
+        confirmBox.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      if (intakeForm) {
+        intakeForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          clearError();
+
+          var name = document.getElementById('clientName').value.trim();
+          var email = document.getElementById('clientEmail').value.trim();
+          var link = document.getElementById('cloudLink').value.trim();
+          var notes = document.getElementById('projectNotes').value.trim();
+          var price = calcPriceDisplay ? calcPriceDisplay.textContent : '$280';
+          var uploading = pxFiles.some(function (f) { return f.status === 'uploading'; });
+          var uploaded = pxFiles.filter(function (f) { return f.status === 'done'; });
+          var failed = pxFiles.some(function (f) { return f.status === 'failed'; });
+
+          if (!name) { showError('Please enter your name.'); document.getElementById('clientName').focus(); return; }
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address so we can send your quote.'); document.getElementById('clientEmail').focus(); return; }
+          if (link && !/^https?:\/\//i.test(link)) { showError('The cloud link must start with http:// or https://'); document.getElementById('cloudLink').focus(); return; }
+          if (uploading) { showError('Your file is still uploading. Please wait for it to finish, then send your request.'); return; }
+          if (!uploaded.length && !link) {
+            showError(failed ? 'Your file failed to upload. Please try uploading it again, or paste a cloud link below.' : 'Please upload your file or paste a cloud link so we can quote your project.');
+            return;
+          }
+
+          // Spam trap: real visitors never fill the hidden field
+          if (document.getElementById('hpField').value) { showConfirmation(name, email, price); return; }
+
+          var fd = new FormData();
+          fd.append('name', name);
+          fd.append('email', email);
+          fd.append('Target format', selText('projectStackSelect'));
+          fd.append('Turnaround', selText('projectUrgencySelect'));
+          fd.append('Uploaded files', uploaded.length
+            ? uploaded.map(function (f) { return f.file.name + ' (' + fmtMB(f.file.size) + ')\n' + consoleUrl(f.key) + '\nKey: ' + f.key; }).join('\n\n')
+            : '(none)');
+          fd.append('Cloud link', link || '(none)');
+          fd.append('Notes', notes || '(none)');
+          fd.append('Estimator quote', price);
+          if (artboardSlider) fd.append('Artboards (estimator)', artboardSlider.value);
+          fd.append('_subject', 'New Pixelshift quote request from ' + name);
+          fd.append('_template', 'table');
+          fd.append('_captcha', 'false');
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Sending\u2026';
+
+          fetch(FORM_ENDPOINT, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } })
+            .then(function (res) {
+              return res.json().catch(function () { return {}; }).then(function (data) {
+                if (res.ok && (data.success === true || data.success === 'true')) {
+                  endSending();
+                  showConfirmation(name, email, price);
+                } else {
+                  throw new Error((data && data.message) || 'Request failed');
+                }
+              });
+            })
+            .catch(function () {
+              endSending();
+              showError('Sorry, your request could not be sent. Please try again, or email us directly at pixelshift.com@gmail.com.');
+            });
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          intakeForm.reset();
+          clearError();
+          pxFiles.slice().forEach(removeUpload);
+          confirmBox.style.display = 'none';
+          intakeForm.style.display = 'flex';
+        });
+      }
+
+      // 7. Apple FAQ Accordion
+      var faqTriggers = document.querySelectorAll('.apple-faq-trigger');
+      faqTriggers.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var item = btn.closest('.apple-faq-item');
+          var isOpen = item.classList.contains('open');
+          document.querySelectorAll('.apple-faq-item').forEach(function (other) { other.classList.remove('open'); });
+          if (!isOpen) {
+            item.classList.add('open');
+          }
+        });
+      });
+
+    })();
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hasIO = 'IntersectionObserver' in window;
+      var root = document.documentElement;
+
+      function once(selector, opts, cb) {
+        var els = document.querySelectorAll(selector);
+        if (!els.length) return;
+        if (!hasIO) { els.forEach(function (el) { cb(el); }); return; }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { io.unobserve(en.target); cb(en.target); }
+          });
+        }, opts);
+        els.forEach(function (el) { io.observe(el); });
+      }
+
+      // 1 & 2. Scroll reveal with stagger
+      if (hasIO && !reduce) {
+        root.classList.add('reveal-ready');
+        document.querySelectorAll('.tile-content').forEach(function (tc) {
+          Array.prototype.forEach.call(tc.children, function (c, i) {
+            if (c.querySelector('.pipe-step')) return;
+            c.classList.add('reveal');
+            c.style.setProperty('--d', Math.min(i, 4) * 90 + 'ms');
+          });
+        });
+        document.querySelectorAll('.pipe-step').forEach(function (st, i) {
+          st.classList.add('reveal');
+          st.style.setProperty('--d', i * 100 + 'ms');
+        });
+        once('.reveal', { threshold: 0, rootMargin: '0px 0px -8% 0px' }, function (el) { el.classList.add('in'); });
+      }
+
+      // 3. Animated counters
+      function ease(t) { return 1 - Math.pow(1 - t, 3); }
+      document.querySelectorAll('.perf-metric-num').forEach(function (el) {
+        var target = parseInt(el.getAttribute('data-count') || el.textContent, 10) || 0;
+        if (hasIO && !reduce) el.textContent = '0';
+        once('.perf-metric-num', { threshold: 0.6 }, function (node) {
+          if (node !== el) return;
+          if (reduce) { el.textContent = target; el.classList.add('counted'); return; }
+          var t0 = null, dur = 1400;
+          el.classList.add('counted');
+          requestAnimationFrame(function step(ts) {
+            if (!t0) t0 = ts;
+            var p = Math.min((ts - t0) / dur, 1);
+            el.textContent = Math.round(target * ease(p));
+            if (p < 1) requestAnimationFrame(step);
+          });
+        });
+      });
+
+      // 4. Before/after slider: knob hint ring + one-time auto sweep
+      var ba = document.getElementById('heroBaContainer');
+      var baIn = document.getElementById('heroBaSlider');
+      if (ba && baIn) {
+        var userTook = false;
+        function take() { userTook = true; ba.classList.add('interacted'); }
+        ['pointerdown', 'keydown', 'touchstart', 'input'].forEach(function (ev) {
+          baIn.addEventListener(ev, take, { passive: true });
+        });
+        function setP(v) { ba.style.setProperty('--slider-p', v + '%'); baIn.value = v; }
+        function inOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+        function sweep() {
+          var legs = [[82, 700], [18, 1100], [50, 800]], from = 50, i = 0, t0 = null;
+          requestAnimationFrame(function frame(ts) {
+            if (userTook) return;
+            if (!t0) t0 = ts;
+            var leg = legs[i], p = Math.min((ts - t0) / leg[1], 1);
+            setP(from + (leg[0] - from) * inOut(p));
+            if (p >= 1) {
+              from = leg[0]; i++; t0 = null;
+              if (i >= legs.length) return;
+            }
+            requestAnimationFrame(frame);
+          });
+        }
+        if (!reduce) {
+          once('#heroBaContainer', { threshold: 0.6 }, function () { setTimeout(function () { if (!userTook) sweep(); }, 500); });
+        }
+      }
+
+      // 5. Code inspector typing
+      var codeEl = document.querySelector('#tab-code pre code');
+      var typingTimer = null;
+      if (codeEl) {
+        var lines = codeEl.innerHTML.split('\n');
+        codeEl.innerHTML = lines.map(function (l) {
+          return '<span class="code-line">' + (l === '' ? '&#8203;' : l) + '</span>';
+        }).join('');
+        var codeLines = codeEl.querySelectorAll('.code-line');
+        function playCode() {
+          clearTimeout(typingTimer);
+          codeLines.forEach(function (ln) { ln.classList.remove('show', 'caret'); ln.classList.add('pending'); });
+          if (reduce) { codeLines.forEach(function (ln) { ln.classList.remove('pending'); }); return; }
+          var i = 0;
+          (function next() {
+            if (i > 0) codeLines[i - 1].classList.remove('caret');
+            if (i >= codeLines.length) return;
+            var ln = codeLines[i++];
+            ln.classList.remove('pending');
+            ln.classList.add('show', 'caret');
+            typingTimer = setTimeout(next, 110);
+          })();
+          // leave the caret blinking on the last line
+          typingTimer = setTimeout(function () {
+            codeLines[codeLines.length - 1].classList.add('caret');
+          }, 110 * codeLines.length + 50);
+        }
+        var codeBtn = document.querySelector('.apple-tab-btn[data-tab="tab-code"]');
+        if (codeBtn) codeBtn.addEventListener('click', playCode);
+      }
+
+      // 6. Cursor glow on dark sections
+      if (window.matchMedia && window.matchMedia('(hover: hover)').matches && !reduce) {
+        document.querySelectorAll('.tile-wrapper.theme-dark').forEach(function (w) {
+          var raf = 0, x = 0, y = 0;
+          w.addEventListener('pointermove', function (e) {
+            var r = w.getBoundingClientRect();
+            x = e.clientX - r.left; y = e.clientY - r.top;
+            if (!raf) raf = requestAnimationFrame(function () {
+              raf = 0;
+              w.style.setProperty('--mx', x + 'px');
+              w.style.setProperty('--my', y + 'px');
+            });
+          }, { passive: true });
+        });
+      }
+
+      // 7. Estimator price pop
+      var pd = document.getElementById('calcPriceDisplay');
+      if (pd && !reduce && 'MutationObserver' in window) {
+        new MutationObserver(function () {
+          pd.classList.remove('price-pop');
+          void pd.offsetWidth;
+          pd.classList.add('price-pop');
+        }).observe(pd, { childList: true, characterData: true, subtree: true });
+      }
+
+      // 8. FAQ smooth height + aria-expanded
+      var faqBox = document.querySelector('.apple-faq-container');
+      if (faqBox) {
+        faqBox.querySelectorAll('.apple-faq-body').forEach(function (b) {
+          var inner = document.createElement('div'); inner.className = 'faq-inner';
+          var pad = document.createElement('div'); pad.className = 'faq-pad';
+          while (b.firstChild) pad.appendChild(b.firstChild);
+          inner.appendChild(pad); b.appendChild(inner);
+        });
+        faqBox.classList.add('faq-ready');
+        faqBox.querySelectorAll('.apple-faq-trigger').forEach(function (btn) {
+          btn.setAttribute('aria-expanded', 'false');
+          btn.addEventListener('click', function () {
+            faqBox.querySelectorAll('.apple-faq-trigger').forEach(function (b) {
+              b.setAttribute('aria-expanded', b.closest('.apple-faq-item').classList.contains('open') ? 'true' : 'false');
+            });
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
